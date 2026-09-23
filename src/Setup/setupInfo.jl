@@ -284,7 +284,14 @@ function setModelRunInfo(info::NamedTuple)
     visualization_backend = get(info.settings.experiment.exe_rules, :visualization_backend, "Types")
     visualization_backend_type = getfield(Types, to_uppercase_first(visualization_backend, "Visualization"))()
     run_info = set_namedtuple_field(run_info, (:visualization_backend, visualization_backend_type))
-    
+
+    ## TEM process-execution backend: "classic" (default, SindbadTEM/LandEcosystem) or
+    ## "terrarium" (SindbadTerrarium, Terrarium.jl AbstractProcess-based -- see
+    ## SindbadTerrarium's INTEGRATION_PLAN.md). Optional key; absent from config -> ClassicBackend,
+    ## so existing configs are unaffected.
+    backend = titlecase(get(info.settings.experiment.exe_rules, :backend, "classic"))
+    run_info = set_namedtuple_field(run_info, (:backend, getfield(Types, Symbol(backend * "Backend"))()))
+
     info = (; info..., temp=(; info.temp..., helpers=(; info.temp.helpers..., run=run_info)))
     return info
 end

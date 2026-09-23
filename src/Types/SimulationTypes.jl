@@ -90,6 +90,20 @@ purpose(::Type{QbmapParallelization}) = "Use Qbmap for parallelization"
 struct ThreadsParallelization <: ParallelizationPackage end
 purpose(::Type{ThreadsParallelization}) = "Use Julia threads for parallelization"
 
+# ------------------------- simulation backend options -------------------------
+export SimulationBackend
+export ClassicBackend
+export TerrariumBackend
+
+abstract type SimulationBackend <: SimulationTypes end
+purpose(::Type{SimulationBackend}) = "Abstract type for selecting which TEM process-execution backend SINDBAD uses"
+
+struct ClassicBackend <: SimulationBackend end
+purpose(::Type{ClassicBackend}) = "Use the classic SindbadTEM LandEcosystem define/precompute/compute/update backend (default)"
+
+struct TerrariumBackend <: SimulationBackend end
+purpose(::Type{TerrariumBackend}) = "Use the Terrarium.jl-based SindbadTerrarium AbstractProcess backend (see SindbadTerrarium's INTEGRATION_PLAN.md)"
+
 # ------------------------- model output options-------------------------
 export OutputStrategy
 export DoOutputAll
