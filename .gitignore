@@ -36,6 +36,7 @@
 *.xls
 *.xlsx
 .*
+!.git/
 ~*
 *_tmp
 tmp_*
